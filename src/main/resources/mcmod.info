@@ -1,21 +1,17 @@
-[
-{
-  "modid": "EnderBags",
-  "name": "EnderBags",
-  "description": "",
-  "version": "1.0.0",
-  "url": "",
-  "updateUrl": "",
-  "authorList": [
-    "Gigabit101"
-    
-  ],
-  "credits": "",
-  "logoFile": "",
-  "screenshots": [
-  ],
-  "parent":"",
-  "dependencies": [
-  ]
-}
-]
+[{
+	"modid": "enderbags",
+	"name": "EnderBags",
+	"description": "",
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "",
+	"updateUrl": "",
+	"authorList": [
+		"Shadows_of_Fire"
+	],
+	"credits": "Gigabit101",
+	"logoFile": "",
+	"screenshots": [],
+	"parent": "",
+	"dependencies": []
+}]
