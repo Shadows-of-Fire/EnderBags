@@ -8,35 +8,35 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Created by Gigabit101 on 06/05/2016.
  */
-public class GuiEnderBag extends GuiContainer
-{
-    private static final ResourceLocation texture = new ResourceLocation("enderbags", "textures/gui/bag.png");
-    public EntityPlayer player;
+public class GuiEnderBag extends GuiContainer {
+	private static final ResourceLocation texture = new ResourceLocation("enderbags", "textures/gui/bag.png");
+	public EntityPlayer player;
 
-    public GuiEnderBag(EntityPlayer player)
-    {
-        super(new ContainerEnderBag(player));
-        this.player = player;
-        this.xSize = 256;
-        this.ySize = 231;
-    }
+	public GuiEnderBag(EntityPlayer player) {
+		super(new ContainerEnderBag(player));
+		this.player = player;
+		this.xSize = 256;
+		this.ySize = 231;
+	}
 
-    @Override
-    public void initGui()
-    {
-        super.initGui();
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
-    }
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
-    protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_) {}
-
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_)
-    {
-        this.mc.getTextureManager().bindTexture(texture);
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
-    }
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		this.mc.getTextureManager().bindTexture(texture);
+		int k = (this.width - this.xSize) / 2;
+		int l = (this.height - this.ySize) / 2;
+		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
+	}
+	
+	@Override
+		public void updateScreen() {
+			if(!inventorySlots.canInteractWith(player)) player.closeScreen();
+			super.updateScreen();
+		}
 }

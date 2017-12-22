@@ -1,45 +1,42 @@
 package gigabit101.EnderBags.proxy;
 
-import gigabit101.EnderBags.init.ModItems;
+import gigabit101.EnderBags.init.ModRegistry;
 import gigabit101.EnderBags.items.IColorable;
-import gigabit101.EnderBags.items.ItemEnderBag;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Created by Gigabit101 on 06/05/2016.
  */
-public class ClientProxy extends CommonProxy
-{
-    @Override
-    public void registerRenders()
-    {
-        int i;
-        for (i = 0; i < ItemEnderBag.COLOURS.length; ++i)
-        {
-            Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(ModItems.enderbag, i, new ModelResourceLocation("enderbags" + ":" + "enderbag", "inventory"));
-        }
+public class ClientProxy extends CommonProxy {
 
-        ItemColors items = Minecraft.getMinecraft().getItemColors();
+	@Override
+	public void preInit() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 
-        items.registerItemColorHandler(new IItemColor()
-        {
-            @Override
-            public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-                Item item = stack.getItem();
-                if (item instanceof IColorable)
-                {
-                    return ((IColorable) item).getColorFromItemStack(stack, tintIndex);
-                }
-                else
-                {
-                    return 0xFFFFFF;
-                }
-            }
-        }, ModItems.enderbag);
-    }
+	@SubscribeEvent
+	public void models(ModelRegistryEvent e) {
+		ModRegistry.ENDERBAG.initModels(e);
+	}
+
+	@Override
+	public void registerColors() {
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+				Item item = stack.getItem();
+				if (item instanceof IColorable) {
+					return ((IColorable) item).getColorFromItemStack(stack, tintIndex);
+				} else {
+					return 0xFFFFFF;
+				}
+			}
+		}, ModRegistry.ENDERBAG);
+	}
 }
