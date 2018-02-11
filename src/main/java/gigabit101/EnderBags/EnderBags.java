@@ -29,7 +29,7 @@ public class EnderBags {
 
 	public static final String MODID = "enderbags";
 	public static final String MODNAME = "EnderBags";
-	public static final String VERSION = "2.0.0";
+	public static final String VERSION = "2.1.0";
 
 	@Instance
 	public static EnderBags INSTANCE;

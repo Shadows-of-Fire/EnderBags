@@ -20,7 +20,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
-import shadows.placebo.item.base.ItemBase;
+import shadows.placebo.item.ItemBase;
 import shadows.placebo.util.PlaceboUtil;
 
 /**
