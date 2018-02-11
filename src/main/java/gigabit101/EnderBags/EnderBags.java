@@ -24,7 +24,7 @@ import shadows.placebo.util.RecipeHelper;
  * Created by Gigabit101 on 06/05/2016.
  */
 
-@Mod(modid = EnderBags.MODID, name = EnderBags.MODNAME, version = EnderBags.VERSION, dependencies = "required-after:placebo@[1.1.3,)")
+@Mod(modid = EnderBags.MODID, name = EnderBags.MODNAME, version = EnderBags.VERSION, dependencies = "required-after:placebo@[1.2.0,)")
 public class EnderBags {
 
 	public static final String MODID = "enderbags";
