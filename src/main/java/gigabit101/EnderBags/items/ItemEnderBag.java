@@ -38,12 +38,12 @@ public class ItemEnderBag extends ItemBase implements IColorable {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemStack) {
+	public String getTranslationKey(ItemStack itemStack) {
 		int meta = itemStack.getItemDamage();
 		if (meta < 0 || meta >= COLOURS.length) {
 			meta = 0;
 		}
-		return super.getUnlocalizedName() + "." + COLOURS[meta];
+		return super.getTranslationKey() + "." + COLOURS[meta];
 	}
 
 	@Override
