@@ -1,82 +1,55 @@
 package gigabit101.EnderBags.init;
 
-import java.util.ArrayList;
-
 import gigabit101.EnderBags.EnderBags;
 import gigabit101.EnderBags.items.ItemEnderBag;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.RecipeSerializers;
+import net.minecraft.item.crafting.RecipeSerializers.SimpleSerializer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 /**
  * Created by Gigabit101 on 06/05/2016.
  */
 
-public class RecipeColour extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public class RecipeColour implements IRecipe {
 
-	public RecipeColour() {
-		setRegistryName(EnderBags.MODID, "bag_coloring");
+	public RecipeColour(ResourceLocation id) {
+
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World worldIn) {
-		ItemStack itemStack = ItemStack.EMPTY;
-		ArrayList<ItemStack> arrayList = new ArrayList<ItemStack>();
-
-		for (int i = 0; i < inv.getSizeInventory(); ++i) {
-			ItemStack currentStack = inv.getStackInSlot(i);
-
-			if (!currentStack.isEmpty()) {
-				if (currentStack.getItem() instanceof ItemEnderBag) {
-					if (!itemStack.isEmpty()) { return false; }
-
-					itemStack = currentStack;
-				} else {
-					if (currentStack.getItem() != Items.DYE) { return false; }
-
-					arrayList.add(currentStack);
-				}
-			}
+	public boolean matches(IInventory inv, World world) {
+		ItemStack bag = ItemStack.EMPTY, dye = ItemStack.EMPTY;
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
+			ItemStack s = inv.getStackInSlot(i);
+			if (s.getItem() instanceof ItemEnderBag) {
+				if (!bag.isEmpty()) return false;
+				bag = s;
+			} else if (s.getItem() instanceof ItemDye) {
+				if (!dye.isEmpty()) return false;
+				dye = s;
+			} else if (!s.isEmpty()) return false;
 		}
-		return !itemStack.isEmpty() && !arrayList.isEmpty();
+		return !bag.isEmpty() && !dye.isEmpty();
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
-		ItemStack itemStack = ItemStack.EMPTY;
-		boolean isBag = false;
-		int newcolour = 0;
-		int i = 0;
-
-		for (i = 0; i < inv.getSizeInventory(); ++i) {
-			ItemStack currentStack = inv.getStackInSlot(i);
-			if (!currentStack.isEmpty()) {
-				if (currentStack.getItem() instanceof ItemEnderBag) {
-					isBag = true;
-					itemStack = currentStack.copy();
-					itemStack.setCount(1);
-				} else {
-					if (currentStack.getItem() != Items.DYE) {
-						return ItemStack.EMPTY;
-					} else {
-						newcolour = EnumDyeColor.byMetadata(currentStack.getItemDamage()).getDyeDamage();
-					}
-				}
-			}
+	public ItemStack getCraftingResult(IInventory inv) {
+		ItemStack bag = ItemStack.EMPTY, dye = ItemStack.EMPTY;
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
+			ItemStack s = inv.getStackInSlot(i);
+			if (s.getItem() instanceof ItemEnderBag) bag = s;
+			else if (s.getItem() instanceof ItemDye) dye = s;
 		}
-
-		if (!isBag) {
-			return ItemStack.EMPTY;
-		} else {
-			itemStack.setItemDamage(newcolour);
-			ItemStack outputstack = itemStack;
-			return outputstack;
-		}
+		if (bag.isEmpty() || dye.isEmpty()) return ItemStack.EMPTY;
+		ItemStack out = new ItemStack(ModRegistry.BAGS.get(((ItemDye) dye.getItem()).getDyeColor()));
+		out.setTag(bag.getTag());
+		return out;
 	}
 
 	@Override
@@ -89,12 +62,22 @@ public class RecipeColour extends IForgeRegistryEntry.Impl<IRecipe> implements I
 		return ItemStack.EMPTY;
 	}
 
+	static ResourceLocation id = new ResourceLocation(EnderBags.MODID, "bag_color");
+
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-		int i = 0;
-		for (i = 0; i < inv.getSizeInventory(); ++i) {
-			inv.decrStackSize(i, 1);
-		}
-		return NonNullList.create();
+	public ResourceLocation getId() {
+		return id;
+	}
+
+	static SimpleSerializer<RecipeColour> serializer = RecipeSerializers.register(new RecipeSerializers.SimpleSerializer<>(id.toString(), RecipeColour::new));
+
+	@Override
+	public IRecipeSerializer<?> getSerializer() {
+		return serializer;
+	}
+
+	@Override
+	public boolean isDynamic() {
+		return true;
 	}
 }

@@ -1,88 +1,80 @@
 package gigabit101.EnderBags.items;
 
-import java.util.List;
-
 import gigabit101.EnderBags.EnderBags;
-import gigabit101.EnderBags.GuiHandler;
-import gigabit101.EnderBags.init.ModRegistry;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import gigabit101.EnderBags.container.ContainerEnderBag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
-import shadows.placebo.item.ItemBase;
-import shadows.placebo.util.PlaceboUtil;
 
 /**
  * Created by Gigabit101 on 06/05/2016.
  */
 
-public class ItemEnderBag extends ItemBase implements IColorable {
+public class ItemEnderBag extends Item implements IColorable, IInteractionObject {
 
-	public static final String[] COLOURS = new String[] { "white", "orange", "magenta", "lightBlue", "yellow", "lime", "pink", "gray", "silver", "cyan", "purple", "blue", "brown", "green", "red", "black" };
+	protected EnumDyeColor color;
+	protected final int colorV;
 
-	public ItemEnderBag() {
-		super("enderbag", EnderBags.INFO);
-		setMaxStackSize(1);
-		setHasSubtypes(true);
-	}
-
-	@Override
-	public String getTranslationKey(ItemStack itemStack) {
-		int meta = itemStack.getItemDamage();
-		if (meta < 0 || meta >= COLOURS.length) {
-			meta = 0;
-		}
-		return super.getTranslationKey() + "." + COLOURS[meta];
-	}
-
-	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (isInCreativeTab(tab)) for (int i = 0; i < COLOURS.length; i++) {
-			items.add(new ItemStack(this, 1, i));
-		}
+	public ItemEnderBag(EnumDyeColor color) {
+		super(new Item.Properties().maxStackSize(1).group(EnderBags.TAB));
+		this.color = color;
+		setRegistryName(EnderBags.MODID, color.getName() + "_bag");
+		float[] vals = color.getColorComponentValues();
+		int[] rgb = new int[3];
+		for (int i = 0; i < 3; i++)
+			rgb[i] = (int) (255 * vals[i]);
+		int value = ((255 & 0xFF) << 24) | ((rgb[0] & 0xFF) << 16) | ((rgb[1] & 0xFF) << 8) | ((rgb[2] & 0xFF) << 0);
+		colorV = value;
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		player.openGui(EnderBags.INSTANCE, GuiHandler.bagID, world, 0, 0, 0);
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
+		if (!world.isRemote) NetworkHooks.openGui((EntityPlayerMP) player, this);
+		return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2) {
-		if (par1ItemStack.getItemDamage() >= EnumDyeColor.values().length) { return 0xFFFFFF; }
-		return EnumDyeColor.byMetadata(par1ItemStack.getItemDamage()).getColorValue();
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(TextFormatting.DARK_PURPLE + "Can be colored in a crafting table with dye");
-	}
-
-	@Override
-	public void initModels(ModelRegistryEvent e) {
-		for (int i = 0; i < ItemEnderBag.COLOURS.length; i++)
-			PlaceboUtil.sMRL(this, i, "inventory");
+	public int getColor(ItemStack stack, int tint) {
+		return colorV;
 	}
 
 	public static ItemStackHandler getHandlerForContainer(ItemStack stack) {
-		if (stack.isEmpty() || stack.getItem() != ModRegistry.ENDERBAG) return null;
+		if (stack.isEmpty()) return null;
 		ItemStackHandler handler = new ItemStackHandler(104);
-		if (stack.hasTagCompound()) handler.deserializeNBT(stack.getTagCompound().getCompoundTag("inv"));
+		if (stack.hasTag()) handler.deserializeNBT(stack.getTag().getCompound("inv"));
 		return handler;
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		return false;
+	}
+
+	@Override
+	public ITextComponent getCustomName() {
+		return null;
+	}
+
+	@Override
+	public Container createContainer(InventoryPlayer inv, EntityPlayer player) {
+		return new ContainerEnderBag(player);
+	}
+
+	@Override
+	public String getGuiID() {
+		return EnderBags.MODID + ":bag_gui";
 	}
 
 }

@@ -3,68 +3,53 @@ package gigabit101.EnderBags;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import gigabit101.EnderBags.config.ConfigEnderBag;
+import gigabit101.EnderBags.config.EnderBagConfig;
 import gigabit101.EnderBags.init.ModRegistry;
-import gigabit101.EnderBags.proxy.CommonProxy;
-import net.minecraft.creativetab.CreativeTabs;
+import gigabit101.EnderBags.init.RecipeColour;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import shadows.placebo.registry.RegistryInformation;
-import shadows.placebo.util.RecipeHelper;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
  * Created by Gigabit101 on 06/05/2016.
  */
 
-@Mod(modid = EnderBags.MODID, name = EnderBags.MODNAME, version = EnderBags.VERSION, dependencies = "required-after:placebo@[1.2.0,)")
+@Mod(EnderBags.MODID)
 public class EnderBags {
 
-	public static final String MODID = "enderbags";
-	public static final String MODNAME = "EnderBags";
-	public static final String VERSION = "2.1.0";
-
-	@Instance
-	public static EnderBags INSTANCE;
-
-	@SidedProxy(clientSide = "gigabit101.EnderBags.proxy.ClientProxy", serverSide = "gigabit101.EnderBags.proxy.CommonProxy")
-	public static CommonProxy PROXY;
-
-	public static final CreativeTabs TAB = new CreativeTabs(MODID) {
-
+	public static final String MODID = "ender_bags";
+	public static final ItemGroup TAB = new ItemGroup(MODID) {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(ModRegistry.ENDERBAG);
+			return new ItemStack(ModRegistry.BAGS.get(EnumDyeColor.WHITE));
 		}
-
 	};
+	public static final Logger LOGGER = LogManager.getLogger(MODID);
+	public static final RecipeHelper RECIPES = new RecipeHelper(MODID, "Ender Bags");
 
-	public static final RegistryInformation INFO = new RegistryInformation(MODID, TAB);
-	public static final RecipeHelper HELPER = new RecipeHelper(MODID, MODNAME, INFO.getRecipeList());
-
-	public static Configuration config;
-
-	public static Logger logger = LogManager.getLogger(MODID);
-
-	@EventHandler
-	public static void preInit(FMLPreInitializationEvent e) {
-		config = new Configuration(e.getSuggestedConfigurationFile());
-		ConfigEnderBag.load(config);
-		MinecraftForge.EVENT_BUS.register(new ModRegistry());
-		PROXY.preInit();
+	public EnderBags() {
+		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, ModRegistry::items);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(EnderBagConfig::onLoad);
+		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::getClientGuiElement);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, EnderBagConfig.SPEC);
 	}
 
-	@EventHandler
-	public void init(FMLInitializationEvent e) {
-		ConfigEnderBag.parseBlacklist();
-		NetworkRegistry.INSTANCE.registerGuiHandler(MODID, new GuiHandler());
-		PROXY.registerColors();
+	@SubscribeEvent
+	public void setup(FMLCommonSetupEvent e) {
+		RECIPES.addRecipe(new RecipeColour(null));
+		Block ww = Blocks.WHITE_WOOL;
+		RECIPES.addShaped(ModRegistry.BAGS.get(EnumDyeColor.WHITE), 3, 3, ww, Items.STRING, ww, ww, Blocks.ENDER_CHEST, ww, ww, ww, ww);
 	}
 }

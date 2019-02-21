@@ -1,0 +1,35 @@
+modLoader="javafml" #mandatory
+
+loaderVersion="[25,)" #mandatory (24 is current forge version)
+
+issueTrackerURL="https://github.com/Shadows-of-Fire/EnderBags/issues" #optional
+
+displayURL="https://minecraft.curseforge.com/projects/ignition-enderbags" #optional
+
+authors="Shadows_of_Fire" #optional
+
+[[mods]] #mandatory
+
+modId="ender_bags" #mandatory
+
+version="${file.jarVersion}" #mandatory
+
+displayName="Ender Bags" #mandatory
+
+description='''
+Large colored bags, nothing more.
+'''
+
+[[dependencies.attained_drops]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[25,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+	
+[[dependencies.attained_drops]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13.2]"
+    ordering="NONE"
+    side="BOTH"
