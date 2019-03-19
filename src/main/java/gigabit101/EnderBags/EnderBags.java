@@ -43,7 +43,7 @@ public class EnderBags {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(EnderBagConfig::onLoad);
 		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::getClientGuiElement);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, EnderBagConfig.SPEC);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EnderBagConfig.SPEC);
 	}
 
 	@SubscribeEvent

@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '3.0.0'
+version = '3.0.1'
 group = 'gigabit101.enderbags'
 archivesBaseName = 'EnderBags-1.13.2'
 
@@ -36,7 +36,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.44'
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.88'
 }
 
 jar {

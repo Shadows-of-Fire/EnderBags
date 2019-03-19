@@ -28,7 +28,7 @@ public class EnderBagConfig {
 		INSTANCE = specPair.getLeft();
 	}
 
-	public final ConfigValue<List<String>> blacklist;
+	public final ConfigValue<List<? extends String>> blacklist;
 	public final List<Item> realBlacklist = new ArrayList<>();
 
 	public EnderBagConfig(ForgeConfigSpec.Builder build) {
@@ -36,9 +36,9 @@ public class EnderBagConfig {
 		build.push("server");
 		List<String> def = new ArrayList<>();
 		for (EnumDyeColor e : EnumDyeColor.values()) {
-			def.add(e.getName() + "_bag");
+			def.add(EnderBags.MODID + ":" + e.getName() + "_bag");
 		}
-		blacklist = build.comment("A list of item registry names that are not allowed in ender bags.  Format is modid:name.").define("blacklist", def);
+		blacklist = build.comment("A list of item registry names that are not allowed in ender bags.  Format is modid:name.").defineList("blacklist", def, (x) -> true);
 		build.pop();
 	}
 
