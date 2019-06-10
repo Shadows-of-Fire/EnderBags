@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import gigabit101.EnderBags.config.EnderBagConfig;
 import gigabit101.EnderBags.init.ModRegistry;
-import gigabit101.EnderBags.init.RecipeColour;
+import gigabit101.EnderBags.init.RecipeColor;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,7 +53,7 @@ public class EnderBags {
 
 	@SubscribeEvent
 	public void setup(FMLCommonSetupEvent e) {
-		RECIPES.addRecipe(new RecipeColour(null));
+		RECIPES.addRecipe(new RecipeColor(null));
 		Block ww = Blocks.WHITE_WOOL;
 		RECIPES.addShaped(ModRegistry.BAGS.get(DyeColor.WHITE), 3, 3, ww, Items.STRING, ww, ww, Blocks.ENDER_CHEST, ww, ww, ww, ww);
 	}

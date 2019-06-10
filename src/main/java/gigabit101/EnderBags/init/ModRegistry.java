@@ -29,6 +29,6 @@ public class ModRegistry {
 
 	@SubscribeEvent
 	public static void containers(Register<ContainerType<?>> e) {
-		e.getRegistry().register(new ContainerType<>(ContainerEnderBag::new).setRegistryName("ender_bags:ender_bag"));
+		e.getRegistry().register(new ContainerType<>(ContainerEnderBag::new).setRegistryName("ender_bag"));
 	}
 }

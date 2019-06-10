@@ -18,6 +18,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @EventBusSubscriber(modid = EnderBags.MODID, value = Dist.CLIENT, bus = Bus.MOD)
 public class ClientHandler {
 
+	@SubscribeEvent
+	public static void clientSetup(FMLClientSetupEvent e) {
+		ScreenManager.registerFactory(ModRegistry.ENDERBAG, GuiEnderBag::new);
+		MinecraftForge.EVENT_BUS.addListener(ClientHandler::registerColors);
+	}
+
 	public static void registerColors(ColorHandlerEvent.Item e) {
 		e.getItemColors().register(new IItemColor() {
 			@Override
@@ -25,11 +31,5 @@ public class ClientHandler {
 				return ((IColorable) stack.getItem()).getColor(stack, tintIndex);
 			}
 		}, ModRegistry.BAGS.values().toArray(new Item[0]));
-	}
-
-	@SubscribeEvent
-	public static void clientSetup(FMLClientSetupEvent e) {
-		ScreenManager.registerFactory(ModRegistry.ENDERBAG, GuiEnderBag::new);
-		MinecraftForge.EVENT_BUS.addListener(ClientHandler::registerColors);
 	}
 }

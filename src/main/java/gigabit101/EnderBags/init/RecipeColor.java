@@ -15,9 +15,9 @@ import net.minecraft.world.World;
  * Created by Gigabit101 on 06/05/2016.
  */
 
-public class RecipeColour implements ICraftingRecipe {
+public class RecipeColor implements ICraftingRecipe {
 
-	public RecipeColour(ResourceLocation id) {
+	public RecipeColor(ResourceLocation id) {
 
 	}
 
@@ -68,7 +68,7 @@ public class RecipeColour implements ICraftingRecipe {
 		return id;
 	}
 
-	static SpecialRecipeSerializer<RecipeColour> serializer = new SpecialRecipeSerializer<>(RecipeColour::new);
+	static SpecialRecipeSerializer<RecipeColor> serializer = new SpecialRecipeSerializer<>(RecipeColor::new);
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {
