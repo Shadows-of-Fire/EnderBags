@@ -7,17 +7,17 @@ import gigabit101.EnderBags.config.EnderBagConfig;
 import gigabit101.EnderBags.init.ModRegistry;
 import gigabit101.EnderBags.init.RecipeColour;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -36,7 +36,7 @@ public class EnderBags {
 	public static final ItemGroup TAB = new ItemGroup(MODID) {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(ModRegistry.BAGS.get(EnumDyeColor.WHITE));
+			return new ItemStack(ModRegistry.BAGS.get(DyeColor.WHITE));
 		}
 	};
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
@@ -44,9 +44,9 @@ public class EnderBags {
 
 	public EnderBags() {
 		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, ModRegistry::items);
+		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, ModRegistry::containers);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(EnderBagConfig::onLoad);
-		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::getClientGuiElement);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EnderBagConfig.SPEC);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
@@ -55,13 +55,13 @@ public class EnderBags {
 	public void setup(FMLCommonSetupEvent e) {
 		RECIPES.addRecipe(new RecipeColour(null));
 		Block ww = Blocks.WHITE_WOOL;
-		RECIPES.addShaped(ModRegistry.BAGS.get(EnumDyeColor.WHITE), 3, 3, ww, Items.STRING, ww, ww, Blocks.ENDER_CHEST, ww, ww, ww, ww);
+		RECIPES.addShaped(ModRegistry.BAGS.get(DyeColor.WHITE), 3, 3, ww, Items.STRING, ww, ww, Blocks.ENDER_CHEST, ww, ww, ww, ww);
 	}
 
 	@SubscribeEvent
 	public void onPickup(EntityItemPickupEvent e) {
 		if (e.getItem().getItem().getItem() == Blocks.ENDER_CHEST.asItem()) {
-			EntityPlayer player = e.getEntityPlayer();
+			PlayerEntity player = e.getEntityPlayer();
 			player.unlockRecipes(RECIPES.getRecipes());
 		}
 	}
@@ -69,7 +69,7 @@ public class EnderBags {
 	@SubscribeEvent
 	public void craft(ItemCraftedEvent e) {
 		if (e.getCrafting().getItem() == Blocks.ENDER_CHEST.asItem()) {
-			EntityPlayer player = e.getPlayer();
+			PlayerEntity player = e.getPlayer();
 			player.unlockRecipes(RECIPES.getRecipes());
 		}
 	}

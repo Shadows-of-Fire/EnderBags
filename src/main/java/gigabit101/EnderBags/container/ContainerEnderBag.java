@@ -1,12 +1,14 @@
 package gigabit101.EnderBags.container;
 
 import gigabit101.EnderBags.config.EnderBagConfig;
+import gigabit101.EnderBags.init.ModRegistry;
 import gigabit101.EnderBags.items.ItemEnderBag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -17,15 +19,16 @@ import net.minecraftforge.items.SlotItemHandler;
 public class ContainerEnderBag extends ContainerBase {
 
 	private ItemStackHandler inv;
-	private EnumHand bagHand;
+	private Hand bagHand;
 	private ItemStack bag;
 
-	public ContainerEnderBag(EntityPlayer player) {
-		bag = player.getHeldItemMainhand();
-		bagHand = EnumHand.MAIN_HAND;
+	public ContainerEnderBag(int id, PlayerInventory pInv) {
+		super(ModRegistry.ENDERBAG, id);
+		bag = pInv.player.getHeldItemMainhand();
+		bagHand = Hand.MAIN_HAND;
 		if (bag.isEmpty() || !(bag.getItem() instanceof ItemEnderBag)) {
-			bag = player.getHeldItemOffhand();
-			bagHand = EnumHand.OFF_HAND;
+			bag = pInv.player.getHeldItemOffhand();
+			bagHand = Hand.OFF_HAND;
 		}
 
 		inv = ItemEnderBag.getHandlerForContainer(bag);
@@ -46,27 +49,27 @@ public class ContainerEnderBag extends ContainerBase {
 
 		for (j = 0; j < 3; ++j) {
 			for (k = 0; k < 9; ++k) {
-				this.addSlot(new Slot(player.inventory, k + j * 9 + 9, 48 + k * 18, 152 + j * 18));
+				this.addSlot(new Slot(pInv, k + j * 9 + 9, 48 + k * 18, 152 + j * 18));
 			}
 		}
 
 		for (j = 0; j < 9; ++j) {
-			if (player.inventory.currentItem == j) {
-				this.addSlot(new SlotLocked(player.inventory, j, 48 + j * 18, 210));
+			if (pInv.currentItem == j) {
+				this.addSlot(new SlotLocked(pInv, j, 48 + j * 18, 210));
 			} else {
-				addSlot(new Slot(player.inventory, j, 48 + j * 18, 210));
+				addSlot(new Slot(pInv, j, 48 + j * 18, 210));
 			}
 		}
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
+	public boolean canInteractWith(PlayerEntity player) {
 		return !bag.isEmpty() && player.getHeldItem(bagHand).getItem() instanceof ItemEnderBag;
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer player) {
-		if (!bag.hasTag()) bag.setTag(new NBTTagCompound());
+	public void onContainerClosed(PlayerEntity player) {
+		if (!bag.hasTag()) bag.setTag(new CompoundNBT());
 		bag.getTag().put("inv", inv.serializeNBT());
 		super.onContainerClosed(player);
 	}

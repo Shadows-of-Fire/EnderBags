@@ -2,18 +2,19 @@ package gigabit101.EnderBags.items;
 
 import gigabit101.EnderBags.EnderBags;
 import gigabit101.EnderBags.container.ContainerEnderBag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IInteractionObject;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
@@ -22,12 +23,12 @@ import net.minecraftforge.items.ItemStackHandler;
  * Created by Gigabit101 on 06/05/2016.
  */
 
-public class ItemEnderBag extends Item implements IColorable, IInteractionObject {
+public class ItemEnderBag extends Item implements IColorable, INamedContainerProvider {
 
-	protected EnumDyeColor color;
+	protected DyeColor color;
 	protected final int colorV;
 
-	public ItemEnderBag(EnumDyeColor color) {
+	public ItemEnderBag(DyeColor color) {
 		super(new Item.Properties().maxStackSize(1).group(EnderBags.TAB));
 		this.color = color;
 		setRegistryName(EnderBags.MODID, color.getName() + "_bag");
@@ -40,9 +41,9 @@ public class ItemEnderBag extends Item implements IColorable, IInteractionObject
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if (!world.isRemote) NetworkHooks.openGui((EntityPlayerMP) player, this);
-		return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+		if (!world.isRemote) NetworkHooks.openGui((ServerPlayerEntity) player, this);
+		return new ActionResult<>(ActionResultType.PASS, player.getHeldItem(hand));
 	}
 
 	@Override
@@ -58,23 +59,13 @@ public class ItemEnderBag extends Item implements IColorable, IInteractionObject
 	}
 
 	@Override
-	public boolean hasCustomName() {
-		return false;
+	public Container createMenu(int id, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerEnderBag(id, inv);
 	}
 
 	@Override
-	public ITextComponent getCustomName() {
-		return null;
-	}
-
-	@Override
-	public Container createContainer(InventoryPlayer inv, EntityPlayer player) {
-		return new ContainerEnderBag(player);
-	}
-
-	@Override
-	public String getGuiID() {
-		return EnderBags.MODID + ":bag_gui";
+	public ITextComponent getDisplayName() {
+		return new TranslationTextComponent(this.getTranslationKey());
 	}
 
 }

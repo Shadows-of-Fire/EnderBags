@@ -32,7 +32,7 @@ public class RecipeHelper implements IResourceManagerReloadListener {
 	private int j = 0;
 	private final String modid;
 	private final String modname;
-	private final List<IRecipe> recipes = new LinkedList<>();
+	private final List<IRecipe<?>> recipes = new LinkedList<>();
 
 	public RecipeHelper(String modid, String modname) {
 		this.modid = modid;
@@ -40,7 +40,7 @@ public class RecipeHelper implements IResourceManagerReloadListener {
 		MinecraftForge.EVENT_BUS.addListener(this::serverStart);
 	}
 
-	public void addRecipe(IRecipe rec) {
+	public void addRecipe(IRecipe<?> rec) {
 		recipes.add(rec);
 	}
 
@@ -75,7 +75,7 @@ public class RecipeHelper implements IResourceManagerReloadListener {
 		addShapeless(output, NonNullList.withSize(numInputs, makeStack(input)));
 	}
 
-	public List<IRecipe> getRecipes() {
+	public List<IRecipe<?>> getRecipes() {
 		return recipes;
 	}
 
@@ -117,7 +117,7 @@ public class RecipeHelper implements IResourceManagerReloadListener {
 
 	@SubscribeEvent
 	public void serverStart(FMLServerStartingEvent e) {
-		e.getServer().getResourceManager().addReloadListener(this);
+		e.getServer().getResourceManager().func_219534_a(this);
 	}
 
 }

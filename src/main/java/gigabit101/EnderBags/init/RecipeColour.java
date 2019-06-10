@@ -2,13 +2,12 @@ package gigabit101.EnderBags.init;
 
 import gigabit101.EnderBags.EnderBags;
 import gigabit101.EnderBags.items.ItemEnderBag;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemDye;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.RecipeSerializers;
-import net.minecraft.item.crafting.RecipeSerializers.SimpleSerializer;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -16,21 +15,21 @@ import net.minecraft.world.World;
  * Created by Gigabit101 on 06/05/2016.
  */
 
-public class RecipeColour implements IRecipe {
+public class RecipeColour implements ICraftingRecipe {
 
 	public RecipeColour(ResourceLocation id) {
 
 	}
 
 	@Override
-	public boolean matches(IInventory inv, World world) {
+	public boolean matches(CraftingInventory inv, World world) {
 		ItemStack bag = ItemStack.EMPTY, dye = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack s = inv.getStackInSlot(i);
 			if (s.getItem() instanceof ItemEnderBag) {
 				if (!bag.isEmpty()) return false;
 				bag = s;
-			} else if (s.getItem() instanceof ItemDye) {
+			} else if (s.getItem() instanceof DyeItem) {
 				if (!dye.isEmpty()) return false;
 				dye = s;
 			} else if (!s.isEmpty()) return false;
@@ -39,15 +38,15 @@ public class RecipeColour implements IRecipe {
 	}
 
 	@Override
-	public ItemStack getCraftingResult(IInventory inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		ItemStack bag = ItemStack.EMPTY, dye = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack s = inv.getStackInSlot(i);
 			if (s.getItem() instanceof ItemEnderBag) bag = s;
-			else if (s.getItem() instanceof ItemDye) dye = s;
+			else if (s.getItem() instanceof DyeItem) dye = s;
 		}
 		if (bag.isEmpty() || dye.isEmpty()) return ItemStack.EMPTY;
-		ItemStack out = new ItemStack(ModRegistry.BAGS.get(((ItemDye) dye.getItem()).getDyeColor()));
+		ItemStack out = new ItemStack(ModRegistry.BAGS.get(((DyeItem) dye.getItem()).getDyeColor()));
 		out.setTag(bag.getTag());
 		return out;
 	}
@@ -69,7 +68,7 @@ public class RecipeColour implements IRecipe {
 		return id;
 	}
 
-	static SimpleSerializer<RecipeColour> serializer = RecipeSerializers.register(new RecipeSerializers.SimpleSerializer<>(id.toString(), RecipeColour::new));
+	static SpecialRecipeSerializer<RecipeColour> serializer = new SpecialRecipeSerializer<>(RecipeColour::new);
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {

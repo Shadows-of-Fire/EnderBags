@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 
 import gigabit101.EnderBags.EnderBags;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
@@ -35,7 +35,7 @@ public class EnderBagConfig {
 		build.comment("Server configuration");
 		build.push("server");
 		List<String> def = new ArrayList<>();
-		for (EnumDyeColor e : EnumDyeColor.values()) {
+		for (DyeColor e : DyeColor.values()) {
 			def.add(EnderBags.MODID + ":" + e.getName() + "_bag");
 		}
 		blacklist = build.comment("A list of item registry names that are not allowed in ender bags.  Format is modid:name.").defineList("blacklist", def, (x) -> true);

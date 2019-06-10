@@ -1,8 +1,9 @@
 package gigabit101.EnderBags.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -11,8 +12,12 @@ import net.minecraft.item.ItemStack;
 
 public abstract class ContainerBase extends Container {
 
+	protected ContainerBase(ContainerType<?> type, int id) {
+		super(type, id);
+	}
+
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+	public ItemStack transferStackInSlot(PlayerEntity player, int slotIndex) {
 		ItemStack originalStack = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(slotIndex);
 		int numSlots = inventorySlots.size();
