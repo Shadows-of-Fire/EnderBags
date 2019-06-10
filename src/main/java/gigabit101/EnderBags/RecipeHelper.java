@@ -118,6 +118,7 @@ public class RecipeHelper implements IResourceManagerReloadListener {
 	@SubscribeEvent
 	public void serverStart(FMLServerStartingEvent e) {
 		e.getServer().getResourceManager().func_219534_a(this);
+		this.onResourceManagerReload(null);
 	}
 
 }

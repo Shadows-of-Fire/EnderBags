@@ -13,7 +13,7 @@ apply plugin: 'eclipse'
 
 version = '4.0.0'
 group = 'gigabit101.enderbags'
-archivesBaseName = 'EnderBags-1.13.2'
+archivesBaseName = 'EnderBags-1.14.2'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
