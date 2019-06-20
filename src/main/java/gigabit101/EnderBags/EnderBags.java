@@ -15,6 +15,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -45,6 +47,7 @@ public class EnderBags {
 	public EnderBags() {
 		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, ModRegistry::items);
 		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, ModRegistry::containers);
+		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, ModRegistry::serializers);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(EnderBagConfig::onLoad);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EnderBagConfig.SPEC);
@@ -53,7 +56,7 @@ public class EnderBags {
 
 	@SubscribeEvent
 	public void setup(FMLCommonSetupEvent e) {
-		RECIPES.addRecipe(new RecipeColor(null));
+		RECIPES.addRecipe(new RecipeColor(new ResourceLocation(MODID, "bag_color")));
 		Block ww = Blocks.WHITE_WOOL;
 		RECIPES.addShaped(ModRegistry.BAGS.get(DyeColor.WHITE), 3, 3, ww, Items.STRING, ww, ww, Blocks.ENDER_CHEST, ww, ww, ww, ww);
 	}

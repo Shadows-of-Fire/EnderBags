@@ -1,12 +1,11 @@
 package gigabit101.EnderBags.init;
 
-import gigabit101.EnderBags.EnderBags;
 import gigabit101.EnderBags.items.ItemEnderBag;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -15,10 +14,10 @@ import net.minecraft.world.World;
  * Created by Gigabit101 on 06/05/2016.
  */
 
-public class RecipeColor implements ICraftingRecipe {
+public class RecipeColor extends SpecialRecipe {
 
 	public RecipeColor(ResourceLocation id) {
-
+		super(id);
 	}
 
 	@Override
@@ -61,22 +60,11 @@ public class RecipeColor implements ICraftingRecipe {
 		return ItemStack.EMPTY;
 	}
 
-	static ResourceLocation id = new ResourceLocation(EnderBags.MODID, "bag_color");
+	public static final IRecipeSerializer<RecipeColor> SERIALIZER = new SpecialRecipeSerializer<>(RecipeColor::new);
 
 	@Override
-	public ResourceLocation getId() {
-		return id;
+	public IRecipeSerializer<RecipeColor> getSerializer() {
+		return SERIALIZER;
 	}
 
-	static SpecialRecipeSerializer<RecipeColor> serializer = new SpecialRecipeSerializer<>(RecipeColor::new);
-
-	@Override
-	public IRecipeSerializer<?> getSerializer() {
-		return serializer;
-	}
-
-	@Override
-	public boolean isDynamic() {
-		return true;
-	}
 }
