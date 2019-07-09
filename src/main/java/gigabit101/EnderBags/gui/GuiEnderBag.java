@@ -43,7 +43,7 @@ public class GuiEnderBag extends ContainerScreen<ContainerEnderBag> {
 
 	@Override
 	public void tick() {
-		if (!this.field_147002_h.canInteractWith(player)) player.closeScreen();
+		if (!this.container.canInteractWith(player)) player.closeScreen();
 		super.tick();
 	}
 }
