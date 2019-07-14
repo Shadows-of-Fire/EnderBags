@@ -34,7 +34,7 @@ Large colored bags, nothing more.
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.attained_drops]]
+[[dependencies.ender_bags]]
     modId="placebo"
     mandatory=true
     versionRange="[2.0.0,)"
