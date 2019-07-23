@@ -1,6 +1,6 @@
 modLoader="javafml" #mandatory
 
-loaderVersion="[27,)" #mandatory
+loaderVersion="[28,)" #mandatory
 
 issueTrackerURL="https://github.com/Shadows-of-Fire/EnderBags/issues" #optional
 
@@ -23,20 +23,20 @@ Large colored bags, nothing more.
 [[dependencies.ender_bags]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[27,)" #mandatory
+    versionRange="[28,)" #mandatory
     ordering="NONE"
     side="BOTH"
 	
 [[dependencies.ender_bags]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.3]"
+    versionRange="[1.14.4]"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.ender_bags]]
     modId="placebo"
     mandatory=true
-    versionRange="[2.0.0,)"
+    versionRange="[2.1.0,)"
     ordering="NONE"
     side="BOTH"
