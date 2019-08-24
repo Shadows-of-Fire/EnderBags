@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '4.1.2'
+version = '4.1.3'
 group = 'gigabit101.enderbags'
 archivesBaseName = 'EnderBags-1.14.4'
 

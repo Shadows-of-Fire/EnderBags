@@ -5,6 +5,7 @@ import gigabit101.EnderBags.init.ModRegistry;
 import gigabit101.EnderBags.items.ItemEnderBag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -16,7 +17,12 @@ import net.minecraftforge.items.SlotItemHandler;
  * Created by Gigabit101 on 03/05/2016.
  */
 
-public class ContainerEnderBag extends ContainerBase {
+public class ContainerEnderBag extends Container {
+
+	public static final int SLOTS_TE = 0;
+	public static final int SLOTS_TE_SIZE = 8 * 13;
+	public static final int SLOTS_INVENTORY = SLOTS_TE_SIZE;
+	public static final int SLOTS_HOTBAR = SLOTS_INVENTORY + 3 * 9;
 
 	private ItemStackHandler inv;
 	private Hand bagHand;
@@ -72,5 +78,24 @@ public class ContainerEnderBag extends ContainerBase {
 		if (!bag.hasTag()) bag.setTag(new CompoundNBT());
 		bag.getTag().put("inv", inv.serializeNBT());
 		super.onContainerClosed(player);
+	}
+
+	@Override
+	public ItemStack transferStackInSlot(PlayerEntity player, int slot_index) {
+		ItemStack slot_stack = ItemStack.EMPTY;
+		Slot slot = inventorySlots.get(slot_index);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stack = slot.getStack();
+			slot_stack = stack.copy();
+			if (slot_index >= SLOTS_INVENTORY && slot_index <= SLOTS_HOTBAR + 9) {
+				if (!mergeItemStack(stack, SLOTS_TE, SLOTS_TE + SLOTS_TE_SIZE, false)) { return ItemStack.EMPTY; }
+			} else if (slot_index >= SLOTS_HOTBAR && slot_index < SLOTS_HOTBAR + 9) {
+				if (!mergeItemStack(stack, SLOTS_INVENTORY, SLOTS_INVENTORY + 3 * 9, false)) { return ItemStack.EMPTY; }
+			} else if (!mergeItemStack(stack, SLOTS_INVENTORY, SLOTS_HOTBAR + 9, true)) { return ItemStack.EMPTY; }
+			slot.onSlotChanged();
+			if (stack.getCount() == slot_stack.getCount()) { return ItemStack.EMPTY; }
+			slot.onTake(player, stack);
+		}
+		return slot_stack;
 	}
 }
