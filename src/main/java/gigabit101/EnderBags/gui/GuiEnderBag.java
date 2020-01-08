@@ -1,6 +1,6 @@
 package gigabit101.EnderBags.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import gigabit101.EnderBags.EnderBags;
 import gigabit101.EnderBags.container.ContainerEnderBag;
@@ -37,7 +37,7 @@ public class GuiEnderBag extends ContainerScreen<ContainerEnderBag> {
 		this.minecraft.getTextureManager().bindTexture(texture);
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
-		GlStateManager.color3f(1, 1, 1);
+		RenderSystem.color3f(1, 1, 1);
 		this.blit(k, l, 0, 0, this.xSize, this.ySize);
 	}
 
