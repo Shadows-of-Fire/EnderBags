@@ -10,7 +10,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -67,15 +66,6 @@ public class ItemEnderBag extends Item implements IColorable, INamedContainerPro
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent(this.getTranslationKey());
-	}
-
-	@Override
-	public CompoundNBT getShareTag(ItemStack stack) {
-		CompoundNBT tag = stack.getTag();
-		if (tag == null) return null;
-		tag = tag.copy();
-		tag.remove("inv");
-		return tag;
 	}
 
 }
