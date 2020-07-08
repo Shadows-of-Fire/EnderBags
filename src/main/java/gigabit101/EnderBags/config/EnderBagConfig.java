@@ -36,7 +36,7 @@ public class EnderBagConfig {
 		build.push("server");
 		List<String> def = new ArrayList<>();
 		for (DyeColor e : DyeColor.values()) {
-			def.add(EnderBags.MODID + ":" + e.getName() + "_bag");
+			def.add(EnderBags.MODID + ":" + e.getTranslationKey() + "_bag");
 		}
 		blacklist = build.comment("A list of item registry names that are not allowed in ender bags.  Format is modid:name.").defineList("blacklist", def, (x) -> true);
 		build.pop();

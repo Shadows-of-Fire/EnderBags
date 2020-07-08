@@ -1,6 +1,6 @@
 package gigabit101.EnderBags.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import gigabit101.EnderBags.EnderBags;
 import gigabit101.EnderBags.container.ContainerEnderBag;
@@ -26,24 +26,28 @@ public class GuiEnderBag extends ContainerScreen<ContainerEnderBag> {
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
-		super.render(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
+	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(stack);
+		super.render(stack, mouseX, mouseY, partialTicks);
+		this.func_230459_a_(stack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+	protected void func_230450_a_(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
 		this.minecraft.getTextureManager().bindTexture(texture);
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
-		RenderSystem.color3f(1, 1, 1);
-		this.blit(k, l, 0, 0, this.xSize, this.ySize);
+		this.blit(stack, k, l, 0, 0, this.xSize, this.ySize);
 	}
 
 	@Override
 	public void tick() {
 		if (!this.container.canInteractWith(player)) player.closeScreen();
 		super.tick();
+	}
+
+	@Override
+	protected void func_230451_b_(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
+
 	}
 }

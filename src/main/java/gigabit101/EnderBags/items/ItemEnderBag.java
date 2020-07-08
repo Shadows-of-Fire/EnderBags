@@ -31,7 +31,7 @@ public class ItemEnderBag extends Item implements IColorable, INamedContainerPro
 	public ItemEnderBag(DyeColor color) {
 		super(new Item.Properties().maxStackSize(1).group(EnderBags.TAB));
 		this.color = color;
-		setRegistryName(EnderBags.MODID, color.getName() + "_bag");
+		setRegistryName(EnderBags.MODID, color.getTranslationKey() + "_bag");
 		float[] vals = color.getColorComponentValues();
 		int[] rgb = new int[3];
 		for (int i = 0; i < 3; i++)
