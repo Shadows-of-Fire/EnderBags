@@ -29,15 +29,15 @@ public class GuiEnderBag extends ContainerScreen<ContainerEnderBag> {
 	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(stack);
 		super.render(stack, mouseX, mouseY, partialTicks);
-		this.func_230459_a_(stack, mouseX, mouseY);
+		this.drawMouseoverTooltip(stack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
-		this.minecraft.getTextureManager().bindTexture(texture);
+	protected void drawBackground(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+		this.getMinecraft().getTextureManager().bindTexture(texture);
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
-		this.blit(stack, k, l, 0, 0, this.xSize, this.ySize);
+		this.drawTexture(stack, k, l, 0, 0, this.xSize, this.ySize);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class GuiEnderBag extends ContainerScreen<ContainerEnderBag> {
 	}
 
 	@Override
-	protected void func_230451_b_(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
+	protected void drawForeground(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
 
 	}
 }
