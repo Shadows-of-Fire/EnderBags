@@ -8,6 +8,8 @@ displayURL="https://minecraft.curseforge.com/projects/ignition-enderbags" #optio
 
 authors="Shadows_of_Fire" #optional
 
+license="GNU GPL V3" #mandatory
+
 [[mods]] #mandatory
 
 modId="ender_bags" #mandatory
@@ -16,8 +18,6 @@ version="${file.jarVersion}" #mandatory
 
 displayName="Ender Bags" #mandatory
 
-license="GNU GPL V3" #mandatory
-
 description='''
 Large colored bags, nothing more.
 '''
@@ -25,20 +25,20 @@ Large colored bags, nothing more.
 [[dependencies.ender_bags]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[32.0.106,)" #mandatory
+    versionRange="[33.0.22,)" #mandatory
     ordering="NONE"
     side="BOTH"
 	
 [[dependencies.ender_bags]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.1,)"
+    versionRange="[1.16.2,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.ender_bags]]
     modId="placebo"
     mandatory=true
-    versionRange="[4.1,)"
+    versionRange="[4.2,)"
     ordering="NONE"
     side="BOTH"
